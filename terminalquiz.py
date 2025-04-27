@@ -57,7 +57,7 @@ class TerminalQuiz:
             self.screen.refresh()
             return
         q = self.questions[self.current]
-        self.screen.addstr(0, 2, f"{self.title}   [Score: {self.score}]  [Option+Cmd+E to Exit]")
+        self.screen.addstr(0, 2, f"{self.title}   [Score: {self.score}]  [Ctrl+E to Exit]")
         if self.remaining <= 5:
             self.screen.attron(curses.color_pair(1))
         self.screen.addstr(1, 2, f"(You have {self.remaining} seconds)")
@@ -67,7 +67,7 @@ class TerminalQuiz:
         for idx, choice in enumerate(q["choices"]):
             letter = chr(65 + idx)
             self.screen.addstr(5 + idx, 4, f"({letter}) {choice}")
-        self.screen.addstr(8, 2, "[Option+Cmd+S to Skip]")
+        self.screen.addstr(8, 2, "[Ctrl+S to Skip]")
         self.screen.refresh()
     def next_question(self):
         self.timer_cancel.set()
