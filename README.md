@@ -28,18 +28,12 @@ git clone https://github.com/YOUR-USERNAME/TQF.git
 cd TQF
 ```
 
-(Optional: if you want to pip install locally)
-
-```bash
-pip install .
-```
-
 ---
 
 ## Usage
 
 ```bash
-python3 tqf.py
+python3 terminalquiz.py
 ```
 
 It will launch the animated TQF boot screen, then start the quiz engine.
