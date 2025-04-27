@@ -1,6 +1,10 @@
 
 # TQF - Terminal Quiz Framework
 
+![Python](https://img.shields.io/badge/python-3.7%2B-blue)
+![Platform](https://img.shields.io/badge/platform-Terminal-brightgreen)
+![License](https://img.shields.io/badge/license-MCPL-blueviolet)
+
 🚀 TQF (Terminal Quiz Framework) is a lightweight Python framework for building interactive, colorful, timed quizzes inside the terminal.
 
 ---
