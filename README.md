@@ -24,8 +24,8 @@
 Clone this repository:
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/TQF.git
-cd TQF
+git clone https://github.com/zimoshi/tqf.git
+cd tqf
 ```
 
 ---
