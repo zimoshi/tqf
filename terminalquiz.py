@@ -23,7 +23,6 @@ class LoadingBar:
     def decrease(self, value):
         self.percentage = max(0, self.percentage - value)
         self.printlb()
-
 class TerminalQuiz:
     def __init__(self, title, time_limit=10):
         self.title = title
@@ -46,10 +45,8 @@ class TerminalQuiz:
             "answer": answer,
             "skipped": False,
         })
-
     def draw_full_screen(self):
         self.screen.clear()
-
         if self.current >= len(self.questions):
             self.screen.addstr(2, 2, f"Quiz completed. Final Score: {self.score}/{len(self.questions)}")
             if self.skipped_questions:
@@ -59,30 +56,23 @@ class TerminalQuiz:
             self.running = False
             self.screen.refresh()
             return
-
         q = self.questions[self.current]
-
         self.screen.addstr(0, 2, f"{self.title}   [Score: {self.score}]  [Option+Cmd+E to Exit]")
-
         if self.remaining <= 5:
             self.screen.attron(curses.color_pair(1))
         self.screen.addstr(1, 2, f"(You have {self.remaining} seconds)")
         if self.remaining <= 5:
             self.screen.attroff(curses.color_pair(1))
-
         self.screen.addstr(3, 2, q["question"])
         for idx, choice in enumerate(q["choices"]):
             letter = chr(65 + idx)
             self.screen.addstr(5 + idx, 4, f"({letter}) {choice}")
-
         self.screen.addstr(8, 2, "[Option+Cmd+S to Skip]")
         self.screen.refresh()
-
     def next_question(self):
         self.timer_cancel.set()
         if self.timer_thread and self.timer_thread.is_alive() and threading.current_thread() != self.timer_thread:
             self.timer_thread.join()
-
         self.current += 1
         self.remaining = self.time_limit
         if self.current >= len(self.questions):
@@ -90,7 +80,6 @@ class TerminalQuiz:
         else:
             self.draw_full_screen()
             self.start_timer()
-
     def skip_question(self, timeout=False):
         self.timer_cancel.set()
         if self.timer_thread and self.timer_thread.is_alive() and threading.current_thread() != self.timer_thread:
@@ -103,7 +92,6 @@ class TerminalQuiz:
             self.questions[self.current]["skipped"] = True
             self.skipped_questions.append(self.questions[self.current]["question"])
         self.next_question()
-
     def live_countdown(self):
         while self.remaining > 0 and not self.timer_cancel.is_set() and self.running:
             self.draw_full_screen()
@@ -111,15 +99,12 @@ class TerminalQuiz:
             self.remaining -= 1
         if not self.timer_cancel.is_set() and self.running:
             self.timeout = True
-
     def start_timer(self):
         self.timeout = False
         self.timer_cancel.clear()
-
         self.timer_thread = threading.Thread(target=self.live_countdown)
         self.timer_thread.daemon = True
         self.timer_thread.start()
-
         while not self.timeout and self.running:
             key = self.screen.getch()
             if key == 19:  # Ctrl+S (skip)
@@ -140,10 +125,8 @@ class TerminalQuiz:
                     self.timer_thread.join()
                 self.check_answer(chr(key).upper())
                 break
-
         if self.timeout and self.running:
             self.skip_question(timeout=True)
-
     def check_answer(self, selected):
         correct = self.questions[self.current]["answer"]
         if selected == correct:
@@ -154,10 +137,8 @@ class TerminalQuiz:
         self.screen.refresh()
         time.sleep(1)
         self.next_question()
-
     def run(self):
         curses.wrapper(self._run)
-
     def _run(self, screen):
         self.screen = screen
         curses.start_color()
@@ -166,7 +147,6 @@ class TerminalQuiz:
         random.shuffle(self.questions)
         self.draw_full_screen()
         self.start_timer()
-
 RESET = "\033[0m"
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -174,10 +154,8 @@ BLUE = "\033[34m"
 BOLD = "\033[1m"
 YELLOW = "\033[33m"
 import time,os
-
 # Initialize a LoadingBar with max length 100 and starting percentage 0
 lb = LoadingBar(100, 0)
-
 # Simulate progress
 for i in range(100):
     os.system('cls' if os.name == 'nt' else 'clear')  # Clear the console
@@ -194,7 +172,29 @@ for i in range(100):
     """)
     lb.increase(1)  # Increment progress
     time.sleep(0.05)  # Delay for demonstration
-
 print(f"{BOLD}TQF load complete!{RESET}")
-
 del LoadingBar,lb,time,os # Clean up the namespace
+if __name__ == "__main__":
+    quiz = TerminalQuiz("Coordinate Plane Quiz", time_limit=15)
+    # Add some coordinate plane questions
+    quiz.add_question(
+        "In which quadrant is the point (3, -5)?",
+        ["Quadrant I", "Quadrant II", "Quadrant III", "Quadrant IV"],
+        "D"
+    )
+    quiz.add_question(
+        "Where is the point (-4, 0) located?",
+        ["Quadrant II", "Quadrant III", "x-axis", "y-axis"],
+        "C"
+    )
+    quiz.add_question(
+        "Point (0, 0) is located at:",
+        ["Quadrant I", "the origin", "the x-axis", "the y-axis"],
+        "B"
+    )
+    quiz.add_question(
+        "What are the signs of (x, y) in Quadrant III?",
+        ["+, +", "-, +", "-, -", "+, -"],
+        "C"
+    )
+    quiz.run()
