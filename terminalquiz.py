@@ -173,7 +173,7 @@ for i in range(100):
     lb.increase(1)  # Increment progress
     time.sleep(0.05)  # Delay for demonstration
 print(f"{BOLD}TQF load complete!{RESET}")
-del LoadingBar,lb,time,os # Clean up the namespace
+del LoadingBar,lb,os # Clean up the namespace
 if __name__ == "__main__":
     quiz = TerminalQuiz("Coordinate Plane Quiz", time_limit=15)
     # Add some coordinate plane questions
